@@ -1,0 +1,17 @@
+[
+    {
+        "email": "recruiter@acme.com",
+        "password": "hashedpassword",
+        "firstName": "John",
+        "lastName": "Doe",
+        "role": "recruiter",
+        "company": "acme"
+    },
+    {
+        "email": "candidate@gmail.com",
+        "password": "hashedpassword",
+        "firstName": "Jane",
+        "lastName": "Smith",
+        "role": "candidate"
+    }
+]
