@@ -63,4 +63,4 @@ HireEase/
 ```
 ---
 ## 🤖HireEase ScreenShots 
-![Recruitment Dashboard](frontend/public/screenshots/dashboard.png)
+![Main UI](<img width="1897" height="976" alt="image" src="https://github.com/user-attachments/assets/e2b02754-d33a-475e-9d3b-96d67e94d869" />)
