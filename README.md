@@ -63,6 +63,11 @@ HireEase/
 ```
 ---
 ## 🤖HireEase ScreenShots 
+Main Page
 <img width="1897" height="976" alt="image" src="https://github.com/user-attachments/assets/4b3acabd-cecf-4c2b-9abd-22eae07ffaa4" />
-D:\HireEase\frontend\src\assets\mainui.png
+Auth
+<img width="517" height="935" alt="image" src="https://github.com/user-attachments/assets/5b575457-e9d8-45a6-9ebb-8b8c5ec48f1a" />
+Recruiter Dashboard
+<img width="1890" height="955" alt="image" src="https://github.com/user-attachments/assets/b4c83085-6e30-4023-a2a7-a157f7470458" />
+
 
