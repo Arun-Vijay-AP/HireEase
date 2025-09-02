@@ -63,4 +63,6 @@ HireEase/
 ```
 ---
 ## 🤖HireEase ScreenShots 
-![Main UI](<img width="1897" height="976" alt="image" src="https://github.com/user-attachments/assets/e2b02754-d33a-475e-9d3b-96d67e94d869" />)
+<img width="1897" height="976" alt="image" src="https://github.com/user-attachments/assets/4b3acabd-cecf-4c2b-9abd-22eae07ffaa4" />
+D:\HireEase\frontend\src\assets\mainui.png
+
