@@ -20,12 +20,7 @@ export default function Landing() {
                 <div className="flex flex-col sm:flex-row gap-6">
                     <Link to="/signin">
                         <Button color="bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 px-8" size="large">
-                            SignIn
-                        </Button>
-                    </Link>
-                    <Link to="/signup">
-                        <Button color="bg-teal-600 hover:bg-teal-700 focus:ring-teal-500 px-8" size="large">
-                            SignUp
+                            Ease My Hiring
                         </Button>
                     </Link>
                 </div>

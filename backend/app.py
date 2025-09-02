@@ -11,6 +11,15 @@ from typing import List, Optional
 import google.generativeai as genai
 from uuid import uuid4
 
+from pydantic import BaseModel
+from typing import Optional, List
+import google.generativeai as genai
+
+# ============================
+# Step 1 : .\venv\Scripts\activate
+# Step 2 : uvicorn app:app --reload
+# ============================
+
 # ============================
 # Config
 # ============================
@@ -31,6 +40,52 @@ headers = {
     "Authorization": f"Bearer {LLAMAPARSE_API_KEY}",
     "Accept": "application/json"
 }
+
+def generate_questions(role: str, topic: Optional[str], num_questions: int) -> List[str]:
+    """
+    Generate interview questions using Gemini LLM.
+    Configures Gemini API inside the function itself.
+    """
+    GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+    if not GEMINI_API_KEY:
+        raise HTTPException(status_code=500, detail="Gemini API key not configured. Please set GEMINI_API_KEY in .env")
+
+    # Configure Gemini client inside the function
+    genai.configure(api_key=GEMINI_API_KEY)
+    gemini_model = genai.GenerativeModel("gemini-1.5-flash")
+
+    prompt = f"Generate {num_questions} interview questions for the role '{role}'"
+    if topic:
+        prompt += f" focused on '{topic}'"
+    prompt += ". Provide only the questions in a numbered list."
+
+    try:
+        # Step 1: Call Gemini API
+        response = gemini_model.generate_content(
+            prompt,
+            generation_config={
+                "temperature": 0.2,
+                "max_output_tokens": 500
+            }
+        )
+
+        # Step 2: Extract text from response
+        output_text = response.text.strip()
+        if not output_text:
+            raise ValueError("Gemini returned empty response")
+
+        # Step 3: Split text into numbered questions
+        questions = [q.strip() for q in output_text.split("\n") if q.strip()]
+        questions = [q[q.find('.') + 1:].strip() if '.' in q else q for q in questions]
+
+        # Step 4: Return only requested number of questions
+        return questions[:num_questions]
+
+    except Exception as e:
+        print("Gemini API error:", e)
+        raise HTTPException(status_code=500, detail=f"Gemini API error: {e}")
+
+
 
 # ============================
 # In-memory Rounds Storage (for demo)
@@ -259,48 +314,65 @@ async def apply_with_resume(
     company: str = Query(...),
     file: UploadFile = File(...)
 ):
-    """Apply for a job with resume - includes full processing and Google Sheets integration"""
-    
-    # Validate file type
+    message_log = []  # Log messages
+
     if not file.filename.lower().endswith(('.pdf', '.doc', '.docx')):
+        message_log.append("❌ Invalid file type")
         raise HTTPException(status_code=400, detail="Invalid file type. Please upload PDF, DOC, or DOCX files only.")
-    
-    # Save resume file
+
     resume_filename, file_path = save_resume_file(file)
-    
+    message_log.append(f"✅ Resume file saved as {resume_filename}")
+
     try:
-        # Step 1: Upload to LlamaParse
+        # Step 1: LlamaParse
         if not LLAMAPARSE_API_KEY:
+            message_log.append("❌ LlamaParse API key not configured")
             raise HTTPException(status_code=500, detail="LlamaParse API key not configured")
-        
+
         llamaparse_job_id = upload_file_backend(file_path, file.filename, file.content_type)
-        
-        # Step 2: Poll for parsing result
+        message_log.append(f"✅ Uploaded to LlamaParse, job_id={llamaparse_job_id}")
+
         parsed_text = poll_result(llamaparse_job_id)
-        
-        # Step 3: Structure with Gemini
+        message_log.append("✅ Parsing completed with LlamaParse")
+
+        # Step 2: Gemini structuring
         if not GEMINI_API_KEY:
+            message_log.append("❌ Gemini API key not configured")
             raise HTTPException(status_code=500, detail="Gemini API key not configured")
-        
+
         structured_data = structure_with_gemini(parsed_text)
-        
-        # Step 4: Add job-specific information to structured data
+        message_log.append("✅ Gemini structured JSON generated")
+
+        # Step 3: Validate required fields
+        try:
+            validate_parsed_resume(structured_data)
+            message_log.append("✅ Validation passed: all required fields present")
+        except ValueError as e:
+            message_log.append(f"❌ Validation failed: {str(e)}")
+            return {
+                "success": False,
+                "message": "Resume validation failed",
+                "log": message_log,
+                "structured_data": structured_data
+            }
+
+        # Step 4: Add job info
         structured_data["Position Applied"] = position
         structured_data["Company"] = company
         structured_data["Job ID"] = jobId
         structured_data["Status"] = "Applied"
         structured_data["Applied Date"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        
+        message_log.append("✅ Added job info to structured data")
+
         # Step 5: Send to Google Sheets
         if SHEETS_WEBAPP_URL:
             try:
                 sheets_response = send_to_sheets(structured_data)
-                print(f"Successfully sent to Google Sheets: {sheets_response}")
+                message_log.append("✅ Successfully sent to Google Sheets")
             except Exception as sheets_error:
-                print(f"Warning: Failed to send to Google Sheets: {sheets_error}")
-                # Continue processing even if Sheets fails
-        
-        # Step 6: Save application locally
+                message_log.append(f"⚠ Failed to send to Google Sheets: {sheets_error}")
+
+        # Step 6: Save locally
         applications = load_applications()
         app_data = {
             "id": str(uuid4()),
@@ -315,23 +387,56 @@ async def apply_with_resume(
         }
         applications.append(app_data)
         save_applications(applications)
-        
+        message_log.append("✅ Application saved locally")
+
         return {
             "success": True,
             "message": "Application submitted successfully",
+            "log": message_log,
             "application": app_data,
             "structured_data": structured_data
         }
-        
+
     except Exception as e:
-        # Clean up file on error
+        message_log.append(f"❌ Application failed: {str(e)}")
         if os.path.exists(file_path):
             os.remove(file_path)
-        raise HTTPException(status_code=500, detail=f"Application failed: {str(e)}")
+        raise HTTPException(status_code=500, detail={"error": str(e), "log": message_log})
     finally:
-        # Clean up temporary file
         if os.path.exists(file_path):
             os.remove(file_path)
+
+# ============================
+# Required Resume Fields
+# ============================
+REQUIRED_FIELDS = [
+    "Full Name",
+    "Email",
+    "Phone",
+    "Position Applied",
+    "Years of Experience",
+    "Skills",
+    "Availability"
+]
+
+# ============================
+# Validation Function
+# ============================
+def validate_parsed_resume(structured_data: dict):
+    """
+    Validates that the parsed JSON contains all required fields
+    and that none of them are empty or None.
+    
+    Args:
+        structured_data (dict): JSON output from Gemini
+    
+    Raises:
+        ValueError: If any required field is missing or empty
+    """
+    missing_fields = [f for f in REQUIRED_FIELDS if not structured_data.get(f)]
+    if missing_fields:
+        raise ValueError(f"Missing required fields: {', '.join(missing_fields)}")
+    return True
 
 @app.get("/applications")
 def get_applications():

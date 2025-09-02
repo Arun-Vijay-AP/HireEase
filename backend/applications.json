@@ -1,26 +1,98 @@
 [
   {
-    "id": "8c516022-16ea-4e00-9b48-513331c41673",
+    "id": "eaac7458-a939-4e91-b521-1da39623ee6e",
     "jobId": "3",
     "position": "UI/UX Designer",
     "company": "Designify",
     "status": "applied",
-    "appliedDate": "2025-08-29T05:45:13.849058",
-    "lastUpdate": "2025-08-29T05:45:13.849058",
-    "resume_filename": "66fe7303-3185-4c23-890b-4c50f639bb82.pdf",
+    "appliedDate": "2025-08-29T08:25:51.898809",
+    "lastUpdate": "2025-08-29T08:25:51.898809",
+    "resume_filename": "a2c47472-a43d-4e2a-a630-dc5833760bf2.pdf",
+    "structured_data": {
+      "Full Name": "Juan Jose Carin",
+      "Email": "juanjose.carin@gmail.com",
+      "Phone": "650-336-4590",
+      "Position Applied": "UI/UX Designer",
+      "Years of Experience": "8",
+      "Skills": "R, Python, SQL, Hadoop, Hive, MrJob, Tableau, Git, AWS, SPSS, SAS, Matlab, Spark, Storm, Bash, EViews, Demetra+, D3.js, Gephi, Neo4j, QGIS, ETL, MySQL, Experiment Design, Machine Learning, Data Mining, Time Series Analysis, Data Visualization, Predictive Modeling, Anomaly Detection, Cloud Computing (AWS), OpenCV, TensorFlow, Hadoop HDFS, Hive, Spark, Data Visualization and Communication",
+      "Preferred Location": "Mountain View, CA",
+      "Availability": "",
+      "Company": "Designify",
+      "Job ID": "3",
+      "Status": "Applied",
+      "Applied Date": "2025-08-29 08:25:47"
+    }
+  },
+  {
+    "id": "8dfe4141-b656-451f-8189-20d54eb02aff",
+    "jobId": "1",
+    "position": "Frontend Developer",
+    "company": "Acme Corp",
+    "status": "applied",
+    "appliedDate": "2025-08-30T17:42:52.030203",
+    "lastUpdate": "2025-08-30T17:42:52.030203",
+    "resume_filename": "26171678-a59f-4cb7-bc30-7cd18d6fe4ff.pdf",
     "structured_data": {
       "Full Name": "Bala M",
       "Email": "balavan2005@gmail.com",
       "Phone": "(099) 411-7579",
-      "Position Applied": "UI/UX Designer",
+      "Position Applied": "Frontend Developer",
       "Years of Experience": "1",
       "Skills": "Microsoft Office, Communication Skills, SEO",
       "Preferred Location": "",
       "Availability": "Friday, August 29, 2025",
-      "Company": "Designify",
-      "Job ID": "3",
+      "Company": "Acme Corp",
+      "Job ID": "1",
       "Status": "Applied",
-      "Applied Date": "2025-08-29 05:45:08"
+      "Applied Date": "2025-08-30 17:42:46"
+    }
+  },
+  {
+    "id": "0dc74d02-c2e8-4ec3-a22d-a04cc9a1e67e",
+    "jobId": "1",
+    "position": "Frontend Developer",
+    "company": "Acme Corp",
+    "status": "applied",
+    "appliedDate": "2025-09-01T08:56:06.101749",
+    "lastUpdate": "2025-09-01T08:56:06.101749",
+    "resume_filename": "1504dcbb-4c86-4357-9f15-ee267c916446.pdf",
+    "structured_data": {
+      "Full Name": "Bala M",
+      "Email": "balavan2005@gmail.com",
+      "Phone": "(099) 411-7579",
+      "Position Applied": "Frontend Developer",
+      "Years of Experience": 1,
+      "Skills": "Microsoft Office, Communication Skills, SEO",
+      "Preferred Location": "",
+      "Availability": "Friday, August 29, 2025",
+      "Company": "Acme Corp",
+      "Job ID": "1",
+      "Status": "Applied",
+      "Applied Date": "2025-09-01 08:56:00"
+    }
+  },
+  {
+    "id": "8864e27d-1a24-414e-ad23-54236751cf3c",
+    "jobId": "1",
+    "position": "Frontend Developer",
+    "company": "Acme Corp",
+    "status": "applied",
+    "appliedDate": "2025-09-01T11:44:12.637651",
+    "lastUpdate": "2025-09-01T11:44:12.637651",
+    "resume_filename": "048f7c43-c78b-455b-b863-6462cde28e79.pdf",
+    "structured_data": {
+      "Full Name": "Bala M",
+      "Email": "balavan2005@gmail.com",
+      "Phone": "(099) 411-7579",
+      "Position Applied": "Frontend Developer",
+      "Years of Experience": 1,
+      "Skills": "Microsoft Office, Communication Skills, SEO",
+      "Preferred Location": "",
+      "Availability": "Friday, August 29, 2025",
+      "Company": "Acme Corp",
+      "Job ID": "1",
+      "Status": "Applied",
+      "Applied Date": "2025-09-01 11:44:08"
     }
   }
 ]
